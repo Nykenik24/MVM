@@ -33,6 +33,7 @@ const char *regstr[] = {
 mvm_vm *new_vm() {
   mvm_vm *vm = malloc(sizeof(mvm_vm));
   vm->reg[REG_PC] = CODE_START;
+  vm->jptn = 1;
   return vm;
 }
 
@@ -368,33 +369,31 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
-    int final_dest = CODE_START + dest - 1;
-    mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-            final_dest, vm->memory[final_dest]);
-    vm->reg[REG_PC] = final_dest;
+    mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+            vm->jpts[dest]);
+    vm->reg[REG_PC] = vm->jpts[dest];
     break;
   }
   case OP_JT: {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_CND] == 1) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JT, but CND wasn't true");
     }
@@ -404,17 +403,16 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_CND] == 0) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JF, but CND wasn't false");
     }
@@ -424,17 +422,16 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_FLAG] == FLAG_ZERO) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JZ, but FLAG wasn't zero");
     }
@@ -444,17 +441,16 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_FLAG] != FLAG_ZERO) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JNZ, but FLAG was zero");
     }
@@ -464,17 +460,16 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_FLAG] == FLAG_NEG) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JN, but FLAG wasn't negative");
     }
@@ -484,20 +479,58 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int dest = AT_PC(vm);
 
-    if (dest < 0 || dest > CODE_MAX) {
-      mvm_errno = MVM_JUMP_OUTSIDE_PROGRAM;
+    if (dest < 0 || dest > vm->jptn) {
+      mvm_errno = MVM_JPT_DOESNT_EXIST;
       errprint("tried to jump to %d", dest);
       exit(1);
     }
 
     if (vm->reg[REG_FLAG] != FLAG_NEG) {
-      int final_dest = CODE_START + dest - 1;
-      mvm_log(LOG_INFO, "Jumping to %d + %d - 1 = %d (op %d)", CODE_START, dest,
-              final_dest, vm->memory[final_dest]);
-      vm->reg[REG_PC] = final_dest;
+      mvm_log(LOG_INFO, "Jumping to jump point %d (at PC %d)", dest,
+              vm->jpts[dest]);
+      vm->reg[REG_PC] = vm->jpts[dest];
     } else {
       mvm_log(LOG_INFO, "Ran JNN, but FLAG wasn negative");
     }
+    break;
+  }
+  case OP_PUTN: {
+    PC_INC(vm);
+    int reg = AT_PC(vm);
+
+    CHECK_REG(reg);
+
+    mvm_log(LOG_INFO, "Output number %d", vm->reg[reg]);
+    printf("%d\n", vm->reg[reg]);
+    break;
+  }
+  case OP_PUTS: {
+    PC_INC(vm);
+    int len = AT_PC(vm);
+
+    CHECK_REG(len);
+
+    char str[256];
+    for (size_t i = 0; i < (size_t)len; i++) {
+      PC_INC(vm);
+      str[i] = vm->memory[vm->reg[REG_PC]];
+    }
+    str[len + 1] = '\0';
+    mvm_log(LOG_INFO, "Output string \"%s\" of length %d");
+    printf("%s\n", str);
+    break;
+  }
+  case OP_JPT: {
+    if (vm->jptn >= MAX_JPTS) {
+      mvm_errno = MVM_REACHED_JPT_LIMIT;
+      errprint("%d", vm->jptn);
+      exit(1);
+    }
+
+    mvm_log(LOG_INFO, "Creating jump point %d at PC %d", vm->jptn,
+            vm->reg[REG_PC]);
+    vm->jpts[vm->jptn] = vm->reg[REG_PC];
+    vm->jptn++;
     break;
   }
   default: {

@@ -2,6 +2,7 @@
 #include "mvm/assembler/lexer.h"
 #include "mvm/error.h"
 #include "mvm/vm.h"
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,7 +30,10 @@ const char *strop[] = {
     [OP_JZ] = "JZ",
     [OP_JNZ] = "JNZ",
     [OP_JN] = "JN",
-    [OP_JNN] = "JNN"
+    [OP_JNN] = "JNN",
+    [OP_PUTN] = "PUTN",
+    [OP_PUTS] = "PUTS",
+    [OP_JPT] = "JPT"
 };
 // clang-format on
 
@@ -55,19 +59,21 @@ uint16_t *assemble(mvm_asm_token_list *tokens, size_t *code_len) {
         errprint("'%s'", token->text);
         exit(1);
       }
+
       break;
     }
-    case T_IMM: {
-      code[codei] = atoi(token->text);
-      codei++;
-      break;
-    }
-    case T_REG: {
+    case T_NUM: {
       code[codei] = atoi(token->text);
       codei++;
       break;
     }
     case T_COMMA: {
+      break;
+    }
+    case T_CHAR: {
+      char c = token->text[0];
+      code[codei] = (uint16_t)c;
+      codei++;
       break;
     }
     }

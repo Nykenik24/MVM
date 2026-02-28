@@ -8,6 +8,7 @@
 #define CODE_MAX MEMORY_MAX - CODE_START
 #define USEMEM_START 0
 #define USEMEM_MAX MEMORY_MAX / 2
+#define MAX_JPTS 256
 
 typedef enum {
   REG_R0,
@@ -52,6 +53,9 @@ typedef enum {
   OP_JNZ,  /* Jump if NOT zero */
   OP_JN,   /* Jump if negative */
   OP_JNN,  /* Jump if NOT negative */
+  OP_PUTN, /* Put number */
+  OP_PUTS, /* Put string */
+  OP_JPT,  /* Define a new jump point */
   OP_COUNT
 } MVM_OP;
 
@@ -59,6 +63,11 @@ typedef struct {
   uint16_t memory[MEMORY_MAX];
   uint16_t reg[REG_COUNT];
   int usemem_counter;
+
+  // Jump points
+  int jpts[MAX_JPTS];
+  // Last jump point's index
+  int jptn;
 } mvm_vm;
 
 mvm_vm *new_vm();

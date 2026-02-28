@@ -1,26 +1,60 @@
 #include "mvm.h"
 #include "mvm/assembler/assembler.h"
 #include "mvm/assembler/lexer.h"
-#include "mvm/util/logger.h"
+#include "mvm/error.h"
 #include "mvm/vm.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
 #ifdef DEBUG
   printf(MVM_BUILD "\n");
   printf("By " MVM_AUTHORS "\n");
   printf("\n\n");
 #endif
 
+  if (argc < 2) {
+    mvm_errno = MVM_NOT_ENOUGH_ARGS;
+    errprint("got %d args", argc);
+    return 1;
+  }
+
+  const char *path = argv[1];
+  FILE *file = fopen(path, "rb");
+  if (!file) {
+    mvm_errno = MVM_LOAD_SOURCE_ERROR;
+    errprint("could not open file %s", path);
+    return 1;
+  }
+
+  fseek(file, 0L, SEEK_END);
+  size_t size = ftell(file);
+  rewind(file);
+
+  char *source = malloc(size + 1);
+  if (!source) {
+    mvm_errno = MVM_LOAD_SOURCE_ERROR;
+    errprint("not enough memory to read file %s", path);
+    fclose(file);
+    return 1;
+  }
+
+  size_t read = fread(source, sizeof(char), size, file);
+  if (read < size) {
+    mvm_errno = MVM_LOAD_SOURCE_ERROR;
+    errprint("could not read file %s", path);
+    free(source);
+    fclose(file);
+    return 1;
+  }
+
+  source[read] = '\0';
+  fclose(file);
+
   mvm_vm *vm = new_vm();
 
-  // const char *source = "LDI &0, i2\n"
-  //                      "SUBI &0, i4, &1\n"
-  //                      "JNN i1\n";
-  const char *source = "NI &0 i2\n"
-                       "GGA &2 t9\n";
   mvm_asm_token_list *tokens = lex(source);
   // for (size_t i = 0; i < tokens->tk_num; i++) {
   //   printf("Token '%s', %s\n", tokens->tokens[i]->text,

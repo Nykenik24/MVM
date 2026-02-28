@@ -1,16 +1,15 @@
 
 #include "mvm/assembler/lexer.h"
 #include "mvm/error.h"
-#include <ctype.h>
+// #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
-const char *kindstr[] = {[T_OP] = "Operation",
-                         [T_IMM] = "Immediate",
-                         [T_REG] = "Register",
-                         [T_COMMA] = "Comma"};
+const char *kindstr[] = {
+    [T_OP] = "Operation", [T_NUM] = "Number", [T_COMMA] = "Comma"};
 
 int is_cap_alpha(char c) { return ((c >= 'A' && c <= 'Z') || c == '_'); }
+int is_low_alpha(char c) { return ((c >= 'a' && c <= 'z') || c == '_'); }
 
 int is_num(char c) { return (c >= '0' && c <= '9'); }
 
@@ -110,6 +109,14 @@ mvm_asm_token_list *lex(const char *source) {
       continue;
     }
 
+    if (c == ';') {
+      while (c != '\n') {
+        i++;
+        c = source[i];
+      }
+      continue;
+    }
+
     if (is_cap_alpha(c)) {
       char buf[256];
       size_t bufi = 0;
@@ -126,8 +133,7 @@ mvm_asm_token_list *lex(const char *source) {
       continue;
     }
 
-    if (c == 'i') {
-      i++;
+    if (is_num(c)) {
       char buf[256];
       size_t bufi = 0;
 
@@ -139,24 +145,7 @@ mvm_asm_token_list *lex(const char *source) {
       }
 
       buf[bufi] = '\0';
-      token_list_push(tokens, buf, T_IMM);
-      continue;
-    }
-
-    if (c == '&') {
-      i++;
-      char buf[256];
-      size_t bufi = 0;
-
-      while (i < len && is_num(source[i])) {
-        if (bufi + 1 < sizeof buf) {
-          buf[bufi++] = source[i];
-        }
-        i++;
-      }
-
-      buf[bufi] = '\0';
-      token_list_push(tokens, buf, T_REG);
+      token_list_push(tokens, buf, T_NUM);
       continue;
     }
 
@@ -164,6 +153,21 @@ mvm_asm_token_list *lex(const char *source) {
       char buf[2] = {',', '\0'};
       token_list_push(tokens, buf, T_COMMA);
       i++;
+      continue;
+    }
+
+    if (c == '\'') {
+      i++;
+      c = source[i];
+      char buf[2] = {c, '\0'};
+      i++;
+      if (source[i] != '\'') {
+        mvm_errno = MVM_LEX_UNKNOWN_CHAR;
+        errprint("%c (instead of single quote in char token)");
+        exit(1);
+      }
+      i++;
+      token_list_push(tokens, buf, T_CHAR);
       continue;
     }
 
