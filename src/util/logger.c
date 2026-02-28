@@ -37,7 +37,7 @@ void mvm_reg_dump(mvm_vm *vm) {
 void mvm_mem_dump(mvm_vm *vm, size_t quantity) {
   printf("\x1b[31mmem\x1b[0m[\x1b[35m0..16\x1b[0m]: ");
   for (size_t i = 0; i < quantity && i < MEMORY_MAX; i++) {
-    printf("\x1b[30m0x\x1b[0m%x ", vm->memory[i]);
+    printf("\x1b[90m0x\x1b[0m%x ", vm->memory[i]);
     if (i > 0 && i % 16 == 0) {
       printf("\n");
       printf("\x1b[31mmem\x1b[0m[\x1b[35m%lu..%lu\x1b[0m]: ", i, i + 16);
