@@ -508,8 +508,6 @@ int run_curr_op(mvm_vm *vm) {
     PC_INC(vm);
     int len = AT_PC(vm);
 
-    CHECK_REG(len);
-
     char str[256];
     for (size_t i = 0; i < (size_t)len; i++) {
       PC_INC(vm);
