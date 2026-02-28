@@ -501,7 +501,7 @@ int run_curr_op(mvm_vm *vm) {
     CHECK_REG(reg);
 
     mvm_log(LOG_INFO, "Output number %d", vm->reg[reg]);
-    printf("%d\n", vm->reg[reg]);
+    printf("%d", vm->reg[reg]);
     break;
   }
   case OP_PUTS: {
@@ -515,7 +515,11 @@ int run_curr_op(mvm_vm *vm) {
     }
     str[len + 1] = '\0';
     mvm_log(LOG_INFO, "Output string \"%s\" of length %d");
-    printf("%s\n", str);
+    printf("%s", str);
+    break;
+  }
+  case OP_NEWL: {
+    printf("\n");
     break;
   }
   case OP_JPT: {

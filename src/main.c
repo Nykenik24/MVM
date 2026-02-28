@@ -7,6 +7,14 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+const char *get_filename_ext(const char *filename) {
+  const char *dot = strrchr(filename, '.');
+  if (!dot || dot == filename)
+    return "";
+  return dot + 1;
+}
 
 int main(int argc, char *argv[]) {
 #ifdef DEBUG
@@ -22,6 +30,13 @@ int main(int argc, char *argv[]) {
   }
 
   const char *path = argv[1];
+  const char *ext = get_filename_ext(path);
+  if (strcmp(ext, "mas")) {
+    mvm_errno = MVM_LOAD_SOURCE_ERROR;
+    errprint("incorrect extension, expected '.mas', got '.%s'", ext);
+    return 1;
+  }
+
   FILE *file = fopen(path, "rb");
   if (!file) {
     mvm_errno = MVM_LOAD_SOURCE_ERROR;

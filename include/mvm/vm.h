@@ -55,6 +55,7 @@ typedef enum {
   OP_JNN,  /* Jump if NOT negative */
   OP_PUTN, /* Put number */
   OP_PUTS, /* Put string */
+  OP_NEWL, /* Put newline */
   OP_JPT,  /* Define a new jump point */
   OP_COUNT
 } MVM_OP;
