@@ -19,16 +19,16 @@
 | CGE  | Checks if `reg0` >= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | CLE  | Checks if `reg0` <= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | CEQ  | Checks if `reg0` == `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
-| JMP  | Jumps to `jpt`                                                        | `jpt`                  |
-| JT   | Jumps to `jpt` **IF** `CND` is true                                   | `jpt`                  |
-| JF   | Jumps to `jpt` **IF** `CND` is false                                  | `jpt`                  |
-| JZ   | Jumps to `jpt` **IF** `FLAG` is `Z` (Zero)                            | `jpt`                  |
-| JNZ  | Jumps to `jpt` **IF** `FLAG` is **NOT** `Z` (Zero)                    | `jpt`                  |
-| JN   | Jumps to `jpt` **IF** `FLAG` is `N` (Negative)                        | `jpt`                  |
-| JNN  | Jumps to `jpt` **IF** `FLAG` is **NOT** `N` (Negative)                | `jpt`                  |
+| JMP  | Jumps to `label`                                                      | `label`                |
+| JT   | Jumps to `label` **IF** `CND` is true                                 | `label`                |
+| JF   | Jumps to `label` **IF** `CND` is false                                | `label`                |
+| JZ   | Jumps to `label` **IF** `FLAG` is `Z` (Zero)                          | `label`                |
+| JNZ  | Jumps to `label` **IF** `FLAG` is **NOT** `Z` (Zero)                  | `label`                |
+| JN   | Jumps to `label` **IF** `FLAG` is `N` (Negative)                      | `label`                |
+| JNN  | Jumps to `label` **IF** `FLAG` is **NOT** `N` (Negative)              | `label`                |
 | PUTN | Output number at `reg`                                                | `reg`                  |
 | PUTS | Output string of len `strlen`. Will read `strlen` characters in code. | `strlen`, `...`        |
-| JPT  | Define a new jump point                                               | _None_                 |
+| LBL  | Define a new label. `label_name` is an identifier.                    | `label_name`           |
 
 <!--
 ## LD

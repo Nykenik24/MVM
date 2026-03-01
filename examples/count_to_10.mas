@@ -1,6 +1,7 @@
 LDI 1, 10
-JPT ; jump point 1
+LBL loop
   ADDI 0, 1, 0
   PUTN 0
+  FLUSH ; put newline
   CEQ 0, 1 ; R0 == 10
-  JF 1 ; jump to 1
+  JF loop ; jump to loop start

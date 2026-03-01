@@ -3,22 +3,22 @@ LDI 2, 10    ; R2 = 10
 
 LDI 0, 0    ; R0 = 0
 
-JPT       ; jump point 1
+LBL loop1 ; first loop
 LDI 1, 0    ; R1 = 0
 
-JPT       ; jump point 2
+LBL loop2 ; second loop
     ADDI 1, 1, 1  ; R1++
     PUTS 4, 'R', '1', ':', ' '
     PUTN 1
-    NEWL
+    FLUSH
     CEQ 1, 2      ; R1 == 10?
-    JF 2          ; if not, jump back to 2
+    JF loop2      ; if not, jump back to loop 2
 
 ADDI 0, 1, 0  ; R0++
-NEWL
+FLUSH
 PUTS 4, 'R', '0', ':', ' '
 PUTN 0
-NEWL
-NEWL
+FLUSH
+FLUSH
 CEQ 0, 2      ; R0 == 10?
-JF 1          ; if not, jump back to 1
+JF loop1      ; if not, jump back to loop 1
