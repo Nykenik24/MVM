@@ -10,7 +10,7 @@
 #define PC_INC(vm) vm->reg[REG_PC]++
 #define AT_PC(vm) (vm->memory[vm->reg[REG_PC]])
 #define CHECK_REG(reg)                                                         \
-  if (reg >= REG_R7) {                                                         \
+  if (reg > REG_R7) {                                                          \
     mvm_errno = MVM_REGISTER_OUT_OF_BOUNDS;                                    \
     errprint("got register %d", reg);                                          \
     exit(1);                                                                   \
