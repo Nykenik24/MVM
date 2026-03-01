@@ -2,6 +2,6 @@ LDI 1, 10
 LBL loop
   ADDI 0, 1, 0
   PUTN 0
-  FLUSH ; put newline
+  FLUSH ; put FLUSHine
   CEQ 0, 1 ; R0 == 10
   JF loop ; jump to loop start

@@ -15,7 +15,7 @@
 | DIV  | Divides `reg0` by `reg1` and stores the value at `reg2`               | `reg0`, `reg1`, `reg2` |
 | DIVI | Divides `reg0` by `imm` and stores the value at `reg1`                | `reg0`, `imm`, `reg1`  |
 | CGR  | Checks if `reg0` > `reg1` and stores the result at `CND`              | `reg0`, `reg1`         |
-| CLO  | Checks if `reg0` < `reg1` and stores the result at `CND`              | `reg1`, `reg1`         |
+| CLO  | Checks if `reg0` < `reg1` and stores the result at `CND`              | `reg0`, `reg1`         |
 | CGE  | Checks if `reg0` >= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | CLE  | Checks if `reg0` <= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | CEQ  | Checks if `reg0` == `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
@@ -27,48 +27,10 @@
 | JN   | Jumps to `label` **IF** `FLAG` is `N` (Negative)                      | `label`                |
 | JNN  | Jumps to `label` **IF** `FLAG` is **NOT** `N` (Negative)              | `label`                |
 | PUTN | Output number at `reg`                                                | `reg`                  |
-| PUTS | Output string of len `strlen`. Will read `strlen` characters in code. | `strlen`, `...`        |
+| PUTS | Output string of len `strlen`. Will read `strlen` characters in code. | `strlen`, `char1`, ... |
 | LBL  | Define a new label. `label_name` is an identifier.                    | `label_name`           |
 
-<!--
-## LD
+## Notes:
 
-LD will load a value from memory (`mem[USEMEM_START + offset]`) to a register.
-
-## LDI
-
-LDI will load an immediate value (second operand of the operation) to a register.
-
-### ADD
-
-ADD will add the values of `reg0` (first operand) and `reg1` (second operand) and store the result at the destination register (`reg2`, last operand).
-
-For example, if we run:
-
-```s
-ADD 0, 1, 2
-```
-
-And
-
-- `R0` is 5
-- `R1` is 6
-
-Then `R2` will, at the end of the operation, contain the value `11`.
-
-### ADDI
-
-ADDI will add the values of `reg0` (first operand) and an immediate value (`imm`, second operand) and store the result at the destination register (`reg1`, last operand)
-
-For example, if we run:
-
-```s
-ADDI 0, 8, 2
-```
-
-And
-
-- `R0` is 4
-
-Then `R2` will, at the end of the operation, contain the value `12`.
--->
+- `PUTS` expects you to write each singular character with the format `'<char>'` after inputting the length.
+- In `LBL` and `JMP` (and all of it's derivatives) labels must be lowercase.

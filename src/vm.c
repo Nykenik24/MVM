@@ -293,6 +293,66 @@ int run_curr_op(mvm_vm *vm) {
     FLAG_N(vm, result);
     break;
   }
+  case OP_CGR: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] > vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d > R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
+  case OP_CLO: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] < vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d < R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
+  case OP_CGE: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] >= vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d >= R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
+  case OP_CLE: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] <= vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d <= R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
   case OP_CEQ: {
     PC_INC(vm);
     int r0 = AT_PC(vm);
@@ -348,18 +408,15 @@ int run_curr_op(mvm_vm *vm) {
   }
   case OP_LBL: {
     PC_INC(vm);
-    char buf[256];
-    int i = 0;
     while ((char)AT_PC(vm) != '\0') {
-      buf[i++] = (char)AT_PC(vm);
       PC_INC(vm);
     }
-    buf[i] = '\0';
     PC_INC(vm);
-    vm->labels[vm->label_num++] = new_label(vm->reg[REG_PC], buf);
     goto skip_inc;
   }
   default:
+    mvm_errno = MVM_UNRECOGNIZED_OPERATION;
+    errprint("opcode %d", op);
     exit(1);
   }
 
@@ -369,7 +426,28 @@ skip_inc:
   return 0;
 }
 
+void preprocess_labels(mvm_vm *vm) {
+  int pc = CODE_START;
+  while (vm->memory[pc] != OP_HALT) {
+    if (vm->memory[pc] == OP_LBL) {
+      pc++;
+      char buf[256];
+      int i = 0;
+      while ((char)vm->memory[pc] != '\0') {
+        buf[i++] = (char)vm->memory[pc++];
+      }
+      buf[i] = '\0';
+      pc++;
+      pc++;
+      vm->labels[vm->label_num++] = new_label(pc, buf);
+    } else {
+      pc++;
+    }
+  }
+}
+
 int vm_loop(mvm_vm *vm) {
+  preprocess_labels(vm);
   while (vm->memory[vm->reg[REG_PC]] != OP_HALT) {
     run_curr_op(vm);
   }
