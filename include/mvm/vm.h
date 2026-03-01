@@ -31,34 +31,34 @@ extern const char *regstr[];
 
 typedef enum {
   OP_HALT = 0x1,
-  OP_LD,   /* Load */
-  OP_LDI,  /* Load immediate */
-  OP_ST,   /* Store */
-  OP_ADD,  /* Add */
-  OP_ADDI, /* Add immediate */
-  OP_SUB,  /* Subtract */
-  OP_SUBI, /* Subtract immediate */
-  OP_MUL,  /* Multiply */
-  OP_MULI, /* Multiply immediate */
-  OP_DIV,  /* Divide */
-  OP_DIVI, /* Divide immediate */
-  OP_CGR,  /* Compare greater */
-  OP_CLO,  /* Compare lower */
-  OP_CGE,  /* Compare greater or equal */
-  OP_CLE,  /* Compare lower or equal */
-  OP_CEQ,  /* Compare equal */
-  OP_CNE,  /* Compare NOT equal */
-  OP_JMP,  /* Jump */
-  OP_JT,   /* Jump if true*/
-  OP_JF,   /* Jump if false */
-  OP_JZ,   /* Jump if zero */
-  OP_JNZ,  /* Jump if NOT zero */
-  OP_JN,   /* Jump if negative */
-  OP_JNN,  /* Jump if NOT negative */
-  OP_PUTN, /* Put number */
-  OP_PUTS, /* Put string */
-  OP_NEWL, /* Put newline */
-  OP_JPT,  /* Define a new jump point */
+  OP_LD,    /* Load */
+  OP_LDI,   /* Load immediate */
+  OP_ST,    /* Store */
+  OP_ADD,   /* Add */
+  OP_ADDI,  /* Add immediate */
+  OP_SUB,   /* Subtract */
+  OP_SUBI,  /* Subtract immediate */
+  OP_MUL,   /* Multiply */
+  OP_MULI,  /* Multiply immediate */
+  OP_DIV,   /* Divide */
+  OP_DIVI,  /* Divide immediate */
+  OP_CGR,   /* Compare greater */
+  OP_CLO,   /* Compare lower */
+  OP_CGE,   /* Compare greater or equal */
+  OP_CLE,   /* Compare lower or equal */
+  OP_CEQ,   /* Compare equal */
+  OP_CNE,   /* Compare NOT equal */
+  OP_JMP,   /* Jump */
+  OP_JT,    /* Jump if true*/
+  OP_JF,    /* Jump if false */
+  OP_JZ,    /* Jump if zero */
+  OP_JNZ,   /* Jump if NOT zero */
+  OP_JN,    /* Jump if negative */
+  OP_JNN,   /* Jump if NOT negative */
+  OP_PUTN,  /* Put number */
+  OP_PUTS,  /* Put string */
+  OP_FLUSH, /* Put newline */
+  OP_JPT,   /* Define a new jump point */
   OP_COUNT
 } MVM_OP;
 

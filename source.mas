@@ -2,6 +2,6 @@ LDI 1, 10 ; set R1 to 10
 JPT ; define jump point 1
   ADDI 0, 1, 0 ; increment R0 by one
   PUTN 0 ; output R0
+  FLUSH ; put newline
   CEQ 0, 1 ; check if R0 equals 10
-  JF 1 ; jump to line 2 
-
+  JF 1 ; jump to line 2

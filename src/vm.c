@@ -548,7 +548,7 @@ int run_curr_op(mvm_vm *vm) {
     printf("%s", str);
     break;
   }
-  case OP_NEWL: {
+  case OP_FLUSH: {
     printf("\n");
     break;
   }

@@ -35,7 +35,7 @@ const char *strop[] = {
     [OP_JNN] = "JNN",
     [OP_PUTN] = "PUTN",
     [OP_PUTS] = "PUTS",
-    [OP_NEWL] = "NEWL",
+    [OP_FLUSH] = "FLUSH",
     [OP_JPT] = "JPT"
 };
 // clang-format on
