@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
   //   printf("0x%x \n", code[i]);
   // }
   vm_load_code(vm, code, code_len);
-  mvm_mem_dump(vm, CODE_START - 15, 32);
+  // mvm_mem_dump(vm, CODE_START - 15, 32);
   vm_loop(vm);
 
   free_token_list(tokens);
