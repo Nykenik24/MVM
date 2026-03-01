@@ -15,7 +15,9 @@
 | DIV  | Divides `reg0` by `reg1` and stores the value at `reg2`               | `reg0`, `reg1`, `reg2` |
 | DIVI | Divides `reg0` by `imm` and stores the value at `reg1`                | `reg0`, `imm`, `reg1`  |
 | CGR  | Checks if `reg0` > `reg1` and stores the result at `CND`              | `reg0`, `reg1`         |
-| CLO  | Checks if `reg0` < `reg1` and stores the result at `CND`              | `reg0`, `reg1`         |
+| CLO  | Checks if `reg0` < `reg1` and stores the result at `CND`              | `reg1`, `reg1`         |
+| CGE  | Checks if `reg0` >= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
+| CLE  | Checks if `reg0` <= `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | CEQ  | Checks if `reg0` == `reg1` and stores the result at `CND`             | `reg0`, `reg1`         |
 | JMP  | Jumps to `jpt`                                                        | `jpt`                  |
 | JT   | Jumps to `jpt` **IF** `CND` is true                                   | `jpt`                  |
