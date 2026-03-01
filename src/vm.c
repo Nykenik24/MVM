@@ -335,6 +335,36 @@ int run_curr_op(mvm_vm *vm) {
     vm->reg[REG_CND] = result;
     break;
   }
+  case OP_CGE: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] >= vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d >= R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
+  case OP_CLE: {
+    PC_INC(vm);
+    int reg0 = AT_PC(vm);
+    PC_INC(vm);
+    int reg1 = AT_PC(vm);
+
+    CHECK_REG(reg0);
+    CHECK_REG(reg1);
+
+    int result = vm->reg[reg0] <= vm->reg[reg1];
+    mvm_log(LOG_INFO, "Storing R%d <= R%d = %s at CND", reg0, reg1,
+            result ? "true" : "false");
+    vm->reg[REG_CND] = result;
+    break;
+  }
   case OP_CEQ: {
     PC_INC(vm);
     int reg0 = AT_PC(vm);

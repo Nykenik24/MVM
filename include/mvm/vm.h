@@ -44,6 +44,8 @@ typedef enum {
   OP_DIVI, /* Divide immediate */
   OP_CGR,  /* Compare greater */
   OP_CLO,  /* Compare lower */
+  OP_CGE,  /* Compare greater or equal */
+  OP_CLE,  /* Compare lower or equal */
   OP_CEQ,  /* Compare equal */
   OP_CNE,  /* Compare NOT equal */
   OP_JMP,  /* Jump */
