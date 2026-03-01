@@ -13,12 +13,12 @@ const char *mvm_errstr[] = {
         "Loaded code surpasses the set code length limit",
     [MVM_OUT_OF_USEMEM_BOUNDS] = "Index is out of usable memory bounds",
     [MVM_DIVIDE_BY_0] = "Can't divide by 0",
-    [MVM_JPT_DOESNT_EXIST] = "Tried to jump to a jump point that doesn't exist",
+    [MVM_LABEL_DOESNT_EXIST] = "Tried to jump to a label that doesn't exist",
     [MVM_ERROR_WHEN_CREATING] = "(INTERNAL) Error when creating/allocating",
     [MVM_LEX_UNKNOWN_CHAR] = "Unknown character",
     [MVM_LOAD_SOURCE_ERROR] = "Couldn't load source",
     [MVM_NOT_ENOUGH_ARGS] = "Not enough arguments",
-    [MVM_REACHED_JPT_LIMIT] = "Reached jump point limit"};
+    [MVM_REACHED_LABEL_LIMIT] = "Reached label limit"};
 
 void errprint(const char *fmt, ...) {
   va_list args;

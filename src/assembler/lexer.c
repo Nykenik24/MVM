@@ -1,4 +1,3 @@
-
 #include "mvm/assembler/lexer.h"
 #include "mvm/error.h"
 // #include <ctype.h>
@@ -168,6 +167,22 @@ mvm_asm_token_list *lex(const char *source) {
       }
       i++;
       token_list_push(tokens, buf, T_CHAR);
+      continue;
+    }
+
+    if (is_low_alpha(c)) {
+      char buf[256];
+      size_t bufi = 0;
+
+      while (i < len && is_low_alpha(source[i])) {
+        if (bufi + 1 < sizeof buf) {
+          buf[bufi++] = source[i];
+        }
+        i++;
+      }
+
+      buf[bufi] = '\0';
+      token_list_push(tokens, buf, T_ID);
       continue;
     }
 

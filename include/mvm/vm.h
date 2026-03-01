@@ -3,12 +3,12 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#define MEMORY_MAX (1 << 16)
+#define MEMORY_MAX UINT16_MAX
 #define CODE_START (MEMORY_MAX / 2 + 1)
 #define CODE_MAX MEMORY_MAX - CODE_START
 #define USEMEM_START 0
 #define USEMEM_MAX MEMORY_MAX / 2
-#define MAX_JPTS 256
+#define MAX_LABELS 256
 
 typedef enum {
   REG_R0,
@@ -58,28 +58,35 @@ typedef enum {
   OP_PUTN,  /* Put number */
   OP_PUTS,  /* Put string */
   OP_FLUSH, /* Put newline */
-  OP_JPT,   /* Define a new jump point */
+  OP_LBL,   /* Define a new label */
   OP_COUNT
 } MVM_OP;
 
 typedef struct {
-  uint16_t memory[MEMORY_MAX];
-  uint16_t reg[REG_COUNT];
+  int pc;
+  char *name;
+} mvm_label;
+
+typedef struct {
+  uint32_t memory[MEMORY_MAX];
+  uint32_t reg[REG_COUNT];
   int usemem_counter;
 
-  // Jump points
-  int jpts[MAX_JPTS];
-  // Last jump point's index
-  int jptn;
+  mvm_label *labels[MAX_LABELS];
+  // Last label's index
+  int label_num;
 } mvm_vm;
 
 mvm_vm *new_vm();
 void free_vm(mvm_vm *vm);
 
-uint16_t vm_read_mem(mvm_vm *vm, int idx);
-void vm_write_mem(mvm_vm *vm, uint16_t data);
+mvm_label *new_label(int pc, const char *name);
+void free_label(mvm_label *label);
 
-void vm_load_code(mvm_vm *vm, uint16_t code[], const size_t len);
+uint32_t vm_read_mem(mvm_vm *vm, int idx);
+void vm_write_mem(mvm_vm *vm, uint32_t data);
+
+void vm_load_code(mvm_vm *vm, uint32_t code[], const size_t len);
 int run_curr_op(mvm_vm *vm);
 int vm_loop(mvm_vm *vm);
 

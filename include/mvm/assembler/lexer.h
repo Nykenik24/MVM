@@ -4,7 +4,7 @@
 #include <stddef.h>
 #define MAX_TOKENS 0xFFFF
 
-typedef enum { T_OP, T_NUM, T_CHAR, T_COMMA } mvm_asm_tk_kind;
+typedef enum { T_OP, T_NUM, T_CHAR, T_COMMA, T_ID } mvm_asm_tk_kind;
 
 extern const char *kindstr[];
 

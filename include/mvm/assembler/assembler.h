@@ -6,6 +6,6 @@
 
 extern const char *strop[];
 
-uint16_t *assemble(mvm_asm_token_list *tokens, size_t *code_len);
+uint32_t *assemble(mvm_asm_token_list *tokens, size_t *code_len);
 
 #endif

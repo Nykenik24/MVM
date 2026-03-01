@@ -2,6 +2,7 @@
 #include "mvm/assembler/lexer.h"
 #include "mvm/error.h"
 #include "mvm/vm.h"
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,12 +37,12 @@ const char *strop[] = {
     [OP_PUTN] = "PUTN",
     [OP_PUTS] = "PUTS",
     [OP_FLUSH] = "FLUSH",
-    [OP_JPT] = "JPT"
+    [OP_LBL] = "LBL"
 };
 // clang-format on
 
-uint16_t *assemble(mvm_asm_token_list *tokens, size_t *code_len) {
-  uint16_t *code = malloc(CODE_MAX);
+uint32_t *assemble(mvm_asm_token_list *tokens, size_t *code_len) {
+  uint32_t *code = malloc(CODE_MAX);
   size_t codei = 0;
   for (size_t i = 0; i < tokens->tk_num; i++) {
     mvm_asm_token *token = tokens->tokens[i];
@@ -75,7 +76,16 @@ uint16_t *assemble(mvm_asm_token_list *tokens, size_t *code_len) {
     }
     case T_CHAR: {
       char c = token->text[0];
-      code[codei] = (uint16_t)c;
+      code[codei] = (uint32_t)c;
+      codei++;
+      break;
+    }
+    case T_ID: {
+      for (size_t i = 0; i < strlen(token->text); i++) {
+        code[codei] = (uint32_t)token->text[i];
+        codei++;
+      }
+      code[codei] = (uint32_t)'\0';
       codei++;
       break;
     }
